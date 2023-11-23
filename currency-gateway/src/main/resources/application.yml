@@ -1,1 +1,7 @@
-
+fixer:
+  base-url: http://data.fixer.io/api/
+  api-key: b27dd18ebb5b542c4679ddd3ffdedf98
+  refresh-rate-seconds: 3600
+  latest-exchanges-endpoint: latest
+  currency-base-param: base
+  base-currency: EUR
