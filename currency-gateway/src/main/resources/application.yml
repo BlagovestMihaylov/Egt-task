@@ -1,3 +1,15 @@
+spring:
+  application:
+    name: currency-gateway
+  datasource:
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 4
+      jdbc-url: jdbc:mariadb://localhost:3306/currency_gateway
+      password: root
+      username: root
+
+
 fixer:
   base-url: http://data.fixer.io/api/
   api-key: b27dd18ebb5b542c4679ddd3ffdedf98
@@ -5,3 +17,4 @@ fixer:
   latest-exchanges-endpoint: latest
   currency-base-param: base
   base-currency: EUR
+
