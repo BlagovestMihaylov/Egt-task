@@ -5,16 +5,18 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @Service
-public class CurrencyService
+public class CurrencyCacheRepository
 {
+    private static final Logger logger = Logger.getLogger(CurrencyCacheRepository.class.getName());
     private final Map<Integer, String> byId;
     private final Map<String, Integer> byCode;
 
     private final CurrencyRepository currencyRepository;
 
-    public CurrencyService(final CurrencyRepository currencyRepository)
+    public CurrencyCacheRepository(final CurrencyRepository currencyRepository)
     {
         this.currencyRepository = currencyRepository;
         byId = new HashMap<>();
@@ -81,6 +83,7 @@ public class CurrencyService
             byCode.put(code, id);
         });
 
+        logger.info("Loaded " + currencies.size() + " currencies");
     }
 
 
