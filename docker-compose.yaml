@@ -34,6 +34,21 @@ services:
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
 
+  currency_gateway:
+    image: buckflago/currency_gateway:latest
+    container_name: currency_gateway
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - maria
+      - redis
+      - rabbitmq
+    environment:
+      DB_CURRENCY_GATEWAY: currency_gateway_db:3306
+      REDIS_CURRENCY_GATEWAY: currency_gateway_redis
+      RABBIT_CURRENCY_GATEWAY: currency_gateway_rabbitmq
+
 volumes:
   mariadb_data:
   redis_data:
