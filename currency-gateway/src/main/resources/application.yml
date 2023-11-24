@@ -5,15 +5,15 @@ spring:
     hikari:
       maximum-pool-size: 20
       minimum-idle: 4
-      jdbc-url: jdbc:mariadb://localhost:3306/currency_gateway
+      jdbc-url: jdbc:mariadb://${DB_CURRENCY_GATEWAY}/currency_gateway
       password: root
       username: root
   data:
     redis:
-      host: localhost
+      host: ${REDIS_CURRENCY_GATEWAY}
       port: 6379
   rabbitmq:
-    host: localhost
+    host: ${RABBIT_CURRENCY_GATEWAY}
     port: 5672
     username: guest
     password: guest
