@@ -58,33 +58,6 @@ public class RatesRepository extends NamedParameterJdbcDaoSupport
                       .query(sql, sqlParameterSource, (resultSet, i) -> rateRowMapper.mapRow(resultSet));
     }
 
-//    public Optional<Rate> getRate(final String baseCurrencyCode, final String targetCurrencyCode)
-//    {
-//        final String sql = """
-//                SELECT base_currency_id, target_currency_id, rate, timestamp
-//                FROM rates
-//                WHERE base_currency_id = :base_currency_id
-//                  AND target_currency_id = :target_currency_id
-//                ORDER BY timestamp DESC
-//                LIMIT 1;
-//                """;
-//
-//        final SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
-//                .addValue("base_currency_id", baseCurrencyCode)
-//                .addValue("target_currency_id", targetCurrencyCode);
-//
-//        try
-//        {
-//            return Optional.ofNullable(Objects.requireNonNull(getNamedParameterJdbcTemplate())
-//                                              .queryForObject(sql, sqlParameterSource,
-//                                                              (resultSet, i) -> rateRowMapper.mapRow(resultSet)));
-//        }
-//        catch (final EmptyResultDataAccessException e)
-//        {
-//            return Optional.empty();
-//        }
-//    }
-
     public void batchInsertRates(final List<Rate> rates)
     {
         final String sql = """
