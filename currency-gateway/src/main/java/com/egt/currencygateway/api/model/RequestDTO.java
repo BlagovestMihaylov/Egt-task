@@ -1,12 +1,5 @@
 package com.egt.currencygateway.api.model;
 
-import com.egt.currencygateway.api.json.RatesRequestJson;
-import com.egt.currencygateway.api.xml.Command;
-
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-
 public class RequestDTO
 {
     private String id;
