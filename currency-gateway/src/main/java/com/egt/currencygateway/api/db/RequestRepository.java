@@ -1,7 +1,9 @@
 package com.egt.currencygateway.api.db;
 
 import com.egt.currencygateway.api.model.RequestDTO;
+import com.egt.currencygateway.exceptions.DuplicateRequestException;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
 import org.springframework.stereotype.Repository;
@@ -14,12 +16,8 @@ import java.util.Objects;
 @DependsOn({"flyway", "flywayInitializer"})
 public class RequestRepository extends NamedParameterJdbcDaoSupport
 {
-    private final RequestRowMapper requestRowMapper;
-
-    public RequestRepository(final DataSource dataSource,
-                             final RequestRowMapper requestRowMapper)
+    public RequestRepository(final DataSource dataSource)
     {
-        this.requestRowMapper = requestRowMapper;
         setDataSource(dataSource);
     }
 
@@ -29,14 +27,21 @@ public class RequestRepository extends NamedParameterJdbcDaoSupport
                 INSERT INTO requests (id, currency, client_id, timestamp, query_period, service_name) VALUES (:id, :currency, :client_id, :timestamp, :query_period, :service_name)
                 """;
 
-        Objects.requireNonNull(getNamedParameterJdbcTemplate())
-               .update(sql, new MapSqlParameterSource("id", request.getId())
-                       .addValue("currency", request.getCurrency())
-                       .addValue("client_id", request.getClientId())
-                       .addValue("timestamp", new Timestamp(request.getTimestamp()))
-                       .addValue("query_period", request.getPeriod())
-                       .addValue("service_name", request.getServiceName())
-               );
+        try
+        {
+            Objects.requireNonNull(getNamedParameterJdbcTemplate())
+                   .update(sql, new MapSqlParameterSource("id", request.getId())
+                           .addValue("currency", request.getCurrency())
+                           .addValue("client_id", request.getClientId())
+                           .addValue("timestamp", new Timestamp(request.getTimestamp()))
+                           .addValue("query_period", request.getPeriod())
+                           .addValue("service_name", request.getServiceName())
+                   );
+        }
+        catch (DuplicateKeyException e)
+        {
+            throw new DuplicateRequestException("Request with id: " + request.getId() + " already exists");
+        }
     }
 
     public void complete(final String id,
