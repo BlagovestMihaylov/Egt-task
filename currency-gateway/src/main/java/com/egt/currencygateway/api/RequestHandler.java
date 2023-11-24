@@ -57,6 +57,8 @@ public class RequestHandler
 
         rabbitProducer.send(request);
 
+        requestRepository.complete(request.getId(), request.getServiceName());
+
         return rates;
     }
 

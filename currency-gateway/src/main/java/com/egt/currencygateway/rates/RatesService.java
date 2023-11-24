@@ -1,6 +1,7 @@
 package com.egt.currencygateway.rates;
 
 import com.egt.currencygateway.currency.CurrencyCacheRepository;
+import com.egt.currencygateway.exceptions.ExchangeNotFoundException;
 import com.egt.currencygateway.fixer.model.ExchangeRateResponse;
 import com.egt.currencygateway.fixer.service.CurrencyExchangeService;
 import com.egt.currencygateway.rates.model.Rate;
@@ -70,7 +71,7 @@ public class RatesService
 
         if (!exchangeRateResponse.success())
         {
-            throw new RuntimeException("Failed to retrieve rates from fixer");
+            throw new ExchangeNotFoundException("Exchange not found for currency: " + baseCurrency);
         }
 
         updateRates(exchangeRateResponse);
