@@ -8,16 +8,17 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @Service
 public class FixerGateway
 {
-    private final static String AUTHORIZATION = "access_key";
-    private final static String BASE_CURRENCY_PARAM = "base";
+    private static final Logger logger = Logger.getLogger(FixerGateway.class.getName());
+    private static final String AUTHORIZATION = "access_key";
+    private static final String BASE_CURRENCY_PARAM = "base";
     private final FixerApiProperties fixerApiProperties;
     private final RestTemplate restTemplate;
 
-    @Autowired
     public FixerGateway(final RestTemplate restTemplate, final FixerApiProperties fixerApiProperties)
     {
         this.fixerApiProperties = fixerApiProperties;
@@ -27,7 +28,7 @@ public class FixerGateway
 
     public ExchangeRateResponse getLatestRates(final Optional<String> baseCurrency)
     {
-        String finalUrl = UriComponentsBuilder.fromHttpUrl(fixerApiProperties.getBaseUrl())
+        String url = UriComponentsBuilder.fromHttpUrl(fixerApiProperties.getBaseUrl())
                                               .path(fixerApiProperties.getLatestExchangesEndpoint())
                                               .queryParam(AUTHORIZATION, fixerApiProperties.getApiKey())
                                               .queryParam(BASE_CURRENCY_PARAM,
@@ -35,7 +36,9 @@ public class FixerGateway
                                               .build()
                                               .toUriString();
 
-        return restTemplate.getForObject(finalUrl, ExchangeRateResponse.class);
+        logger.info("Sending request to: " + url);
+
+        return restTemplate.getForObject(url, ExchangeRateResponse.class);
     }
 
 }
